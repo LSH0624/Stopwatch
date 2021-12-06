@@ -11,9 +11,9 @@ class QtStopwatch : public QMainWindow
 public:
     QtStopwatch(QWidget *parent = Q_NULLPTR);
 
-    QTimer* stopwatch_timer = new QTimer(this) ;
-    int stopwatch_time;
-    unsigned LABS = 0;      
+    QTimer* stopwatch_timer = new QTimer(this);
+    int stopwatch_time = 0;
+    int LABS = 0;      
 
 private slots:
 
