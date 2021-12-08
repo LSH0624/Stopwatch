@@ -50,3 +50,7 @@ QtStopwatch/x64/Release/moc/moc_QtStopwatch.cpp
 QtStopwatch/x64/Release/qmake/temp/Makefile
 QtStopwatch/x64/Release/rcc/qrc_QtStopwatch.cpp
 QtStopwatch/x64/Release/uic/ui_QtStopwatch.h
+QtStopwatch/.vs/QtStopwatch/v16/Browse.VC.opendb
+QtStopwatch/.vs/QtStopwatch/v16/Browse.VC.db-wal
+QtStopwatch/.vs/QtStopwatch/v16/Browse.VC.db-shm
+QtStopwatch/x64/Debug/moc/moc_TimerThread.cpp

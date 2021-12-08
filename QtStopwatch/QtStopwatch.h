@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_QtStopwatch.h"
 #include <QTimer>
+#include "TimerThread.h"
 
 class QtStopwatch : public QMainWindow
 {
@@ -15,6 +16,8 @@ public:
     int stopwatch_time = 0;
     int LABS = 0;      
 
+    TimerThread* TimerThread_emit;
+
 private slots:
 
     void PushButton_start();
@@ -22,8 +25,8 @@ private slots:
     void PushButton_stop();
     void PushButton_reset();
 
-    void on_stopwatch_timer();
-
+    void on_stopwatch_timer(QTime t);
+    
 private:
     Ui::QtStopwatchClass ui;
 };
