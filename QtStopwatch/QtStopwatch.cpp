@@ -24,12 +24,6 @@ QtStopwatch::QtStopwatch(QWidget *parent)
     ui.pushButton_Reset->setEnabled(false);
 }
 
-void QtStopwatch::closeEvent()
-{
-    TimerThread_emit->bstop = false;
-    this->close();
-}
-
 void QtStopwatch::PushButton_start() //start 누르면 10ms 기준으로 카운트 시작.
 {
     TimerThread_emit->start(); //기본 단위 10ms     

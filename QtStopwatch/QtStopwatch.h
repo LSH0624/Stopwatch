@@ -23,8 +23,7 @@ private slots:
     void PushButton_stop();
     void PushButton_reset();
 
-    void on_stopwatch_timer(QTime t);
-    void QtStopwatch::closeEvent();
+    void on_stopwatch_timer(QTime t);   
     
 private:
     Ui::QtStopwatchClass ui;
