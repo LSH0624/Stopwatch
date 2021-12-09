@@ -1,6 +1,5 @@
 #include "QtStopwatch.h"
 #include "ui_QtStopwatch.h"
-#include <QTimer>
 #include "TimerThread.h"
 
 QtStopwatch::QtStopwatch(QWidget *parent)
@@ -9,21 +8,35 @@ QtStopwatch::QtStopwatch(QWidget *parent)
     ui.setupUi(this);
 
     TimerThread_emit = new TimerThread(this, true); //TimerThread로 연결.
-
+  
     connect(TimerThread_emit, &TimerThread::ms_signal, this, &QtStopwatch::on_stopwatch_timer); //SIGNAL이 발생하면 SLOT 이벤트가 발생.
-    //아래보다 위쪽이 나은 코드. 둘이 동일한 기능이다.
+    //아래보다 위쪽으로 짜자. 둘이 동일한 기능이다.
     //connect(stopwatch_timer, SIGNAL(timeout()), this, SLOT(on_stopwatch_timer())); //SIGNAL이 발생하면 SLOT 이벤트가 발생.
-        //QTimer를 만들고, SLOT에 timeout()에 연결. start() 넣어주면 특정 interval에 timeout() signal을 발생.
+    //QTimer를 만들고, SLOT에 timeout()에 연결. start() 넣어주면 특정 interval에 timeout() signal을 발생.  
 
     connect(ui.pushButton_Start, &QAbstractButton::clicked, this, &QtStopwatch::PushButton_start);
     connect(ui.pushButton_Lab, &QAbstractButton::clicked, this, &QtStopwatch::PushButton_lab);
     connect(ui.pushButton_Stop, &QAbstractButton::clicked, this, &QtStopwatch::PushButton_stop);
     connect(ui.pushButton_Reset, &QAbstractButton::clicked, this, &QtStopwatch::PushButton_reset);
+
+    ui.pushButton_Lab->setEnabled(false); //버튼 비활성화 이벤트. start제외한 다른 버튼은 시작시 false로.
+    ui.pushButton_Stop->setEnabled(false);
+    ui.pushButton_Reset->setEnabled(false);
+}
+
+void QtStopwatch::closeEvent()
+{
+    TimerThread_emit->bstop = false;
+    this->close();
 }
 
 void QtStopwatch::PushButton_start() //start 누르면 10ms 기준으로 카운트 시작.
 {
     TimerThread_emit->start(); //기본 단위 10ms     
+
+    ui.pushButton_Start->setEnabled(false);
+    ui.pushButton_Lab->setEnabled(true);
+    ui.pushButton_Stop->setEnabled(true);
 }
 
 void QtStopwatch::on_stopwatch_timer(QTime t) //start 눌렀을 때 타이머 lcd에 숫자 올리기. connect에서 TimerThread::ms_signal을 썼기에 signal에서 나오는 값(QTime t)을 받는거
@@ -53,10 +66,16 @@ void QtStopwatch::on_stopwatch_timer(QTime t) //start 눌렀을 때 타이머 lcd에 숫�
 void QtStopwatch::PushButton_stop()
 {
     TimerThread_emit->bstop = false;
+
+    ui.pushButton_Stop->setEnabled(false);
+    ui.pushButton_Start->setEnabled(false);   
+    ui.pushButton_Reset->setEnabled(true);    
 }
 
 void QtStopwatch::PushButton_lab()
 {
+    ++LABS;
+
     int H_1 = ui.lcd_H_1->intValue();
     int H_2 = ui.lcd_H_2->value();
 
@@ -67,18 +86,16 @@ void QtStopwatch::PushButton_lab()
     int S_2 = ui.lcd_S_2->intValue();
 
     int ms_1 = ui.lcd_ms_1->intValue();
-    int ms_2 = ui.lcd_ms_2->intValue();
-
-    ++LABS;
+    int ms_2 = ui.lcd_ms_2->intValue(); 
 
     ui.plainTextEdit->appendPlainText(QString::number(LABS)+ "                  " +     
-        QString::number(H_1) + QString::number(H_2) + ":" + QString::number(M_1) + QString::number(M_2)
-        + ":" + QString::number(S_1) + QString::number(S_2) + "." + QString::number(ms_1) + QString::number(ms_2));
+        QString::number(H_1) + QString::number(H_2) + " : " + QString::number(M_1) + QString::number(M_2)
+        + " : " + QString::number(S_1) + QString::number(S_2) + " . " + QString::number(ms_1) + QString::number(ms_2));
 }
 
 void QtStopwatch::PushButton_reset()
 {
-    TimerThread_emit->bstop = false;    
+    TimerThread_emit->bstop;    
     
     LABS = 0;
 
@@ -92,4 +109,9 @@ void QtStopwatch::PushButton_reset()
     ui.lcd_ms_2->display(0);
 
     ui.plainTextEdit->setPlainText("");
+
+    ui.pushButton_Start->setEnabled(true);
+    ui.pushButton_Reset->setEnabled(false);
+    ui.pushButton_Stop->setEnabled(false);
+    ui.pushButton_Lab->setEnabled(false);
 }

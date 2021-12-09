@@ -14,12 +14,12 @@ public:
 	//만약 stop = true 라면, thread는 break.
 	//out of the loop, and wil be disposed
 
-	bool bstop;
+	bool bstop;	
 
 signals:
 	//Gui Thread와 통신하기 위함
 	//we need to emit a signal
-	void ms_signal(QTime t);
+	void ms_signal(QTime t);	
 
 public slots:
 
